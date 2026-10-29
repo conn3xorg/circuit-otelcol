@@ -164,6 +164,8 @@ The default config uses component names from 0.164.0, such as `host_metrics` and
 | `service` | Name of the collector's systemd service, such as `otelcol-contrib`. |
 | `config_file` | Path of the live config on each host, such as `/etc/otelcol-contrib/config.yaml`. |
 
+> **On the first install,** the upstream package starts the collector straight away with its own example config, which listens on all addresses, until the circuit's config replaces it a few seconds later. If that matters on your network, keep the collector's ports closed with [circuit-firewall](https://github.com/conn3xorg/circuit-firewall) before you apply.
+
 ## Requirements
 
 Requires Conn3x v0.6.9 or later, systemd on each host, and outbound HTTPS to github.com. Hosts must be x86_64 or arm64.
