@@ -1,5 +1,7 @@
 # circuit-otelcol
 
+[![Conn3x grade](https://conn3x.org/circuits/otelcol/grade.svg)](https://conn3x.org/circuits/otelcol/grade)
+
 A Conn3x circuit that installs the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) on your hosts, as an agent for each host or as a gateway for others, and keeps it running. It installs the official `.deb` or `.rpm` from a pinned [release](https://github.com/open-telemetry/opentelemetry-collector-releases/releases), checks its SHA-256 first, and only puts a config live after the collector's own `validate` has passed it.
 
 Out of the box, each host sends its CPU, memory, disk, filesystem, network and paging metrics, its systemd journal, and anything local applications send over OTLP, on to an OTLP endpoint you name. Give it a config of your own and it runs that instead.
