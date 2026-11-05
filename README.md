@@ -16,7 +16,7 @@ variable "otlp_token" {
 }
 
 module "otelcol" {
-  source = "github.com/conn3xorg/circuit-otelcol?ref=v0.1.1"
+  source = "github.com/conn3xorg/circuit-otelcol?ref=v0.2.0"
 
   hosts = {
     web1 = "203.0.113.10"
@@ -48,7 +48,7 @@ To try it on a throwaway container first, see [examples/local](examples/local).
 
 ```hcl
 module "otelcol" {
-  source = "github.com/conn3xorg/circuit-otelcol?ref=v0.1.1"
+  source = "github.com/conn3xorg/circuit-otelcol?ref=v0.2.0"
 
   hosts       = { gw1 = "10.0.0.5" }
   environment = { HONEYCOMB_API_KEY = var.honeycomb_api_key }
