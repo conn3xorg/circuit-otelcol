@@ -57,7 +57,8 @@ variable "distribution" {
 variable "otelcol_version" {
   type        = string
   default     = "0.164.0"
-  description = "Collector release to install, without the leading v. Raising it upgrades the collector in place."
+  nullable    = false
+  description = "Collector release to install, without the leading v. Raising it upgrades the collector in place. Null means the default."
 
   validation {
     condition     = can(regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", var.otelcol_version))
