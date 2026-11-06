@@ -176,6 +176,8 @@ Requires Conn3x v0.6.9 or later, systemd on each host, and outbound HTTPS to git
 
 Rocky Linux 10, Fedora 45, Ubuntu 24.04 and Debian 13. CI applies [examples/local](examples/local) to each on amd64, checks that the second plan has no changes, posts a log over OTLP to `127.0.0.1:4318` and finds it in the file exporter's output with a value from `environment`, and reads `system_cpu_` metrics from the Prometheus exporter on `127.0.0.1:8889`.
 
+The example also passes `OTLP_TOKEN` in `environment`, standing in for an exporter's API key, and CI checks it reaches `conn3x.env` and nowhere in `terraform.tfstate`. CI then restarts the container and runs the same checks, with the plan still empty. On a fresh container it installs 0.163.2, then applies the circuit's own pin over it, and checks the second plan is empty, `otelcol-contrib --version` reports 0.164.0 and the checks pass.
+
 By hand, on arm64 Rocky Linux 10 and Fedora 45 containers, the default config ran with each `otlp_protocol` and with the core `otelcol` build, switching builds stopped the other one, a config that fails `validate` stopped the apply and left the live config alone, and a secret in `environment` stayed out of the state file.
 
 It was also applied to an Ubuntu 24.04 droplet and a Rocky Linux 10 droplet with SELinux enforcing. Both started on 0.163.2 and were upgraded to 0.164.0, which kept the circuit's config. Journal lines reached the file exporter, `system_cpu_time_seconds_total` was on the Prometheus exporter, and the CI check passed. After a reboot the collector came back, the check passed again, the plan had no changes and there were no SELinux denials.
