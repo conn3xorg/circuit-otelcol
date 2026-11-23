@@ -170,7 +170,7 @@ The default config uses component names from 0.164.0, such as `host_metrics` and
 
 ## Requirements
 
-Requires Conn3x v0.6.9 or later, systemd on each host, and outbound HTTPS to github.com. Hosts must be x86_64 or arm64.
+Requires Conn3x v0.29.0 or later, systemd on each host, and outbound HTTPS to github.com. Hosts must be x86_64 or arm64.
 
 ## Tested on
 
