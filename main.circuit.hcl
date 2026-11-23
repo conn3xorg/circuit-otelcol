@@ -163,8 +163,8 @@ circuit "otelcol" {
   # systemd doesn't always notice a new drop-in for a unit it has loaded,
   # and the restart would then run without the environment.
   step "daemon_reload" {
-    command {
-      command  = "systemctl daemon-reload"
+    service_action {
+      action   = "daemon-reload"
       triggers = { dropin = sha256(local.dropin_content) }
     }
   }
