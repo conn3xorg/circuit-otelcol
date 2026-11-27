@@ -129,12 +129,15 @@ circuit "otelcol" {
     }
   }
 
-  # Installs or upgrades from the checked file. confold keeps the config
-  # this circuit wrote when an upgrade ships a new example config.yaml.
+  # Installs, upgrades or downgrades from the checked file with apt-get or
+  # dnf. On Debian and Ubuntu, apt-get runs with --force-confold, which
+  # keeps the config this circuit wrote when an upgrade ships a new
+  # example config.yaml.
   step "package" {
-    command {
-      command = local.ext[each.key] == "deb" ? "DEBIAN_FRONTEND=noninteractive apt-get install -y -o DPkg::Lock::Timeout=300 -o Dpkg::Options::=--force-confold /var/cache/conn3x-otelcol/${local.pkg[each.key]}" : "dnf -y install /var/cache/conn3x-otelcol/${local.pkg[each.key]}"
-      unless  = local.ext[each.key] == "deb" ? "[ \"$(dpkg-query -W -f='$${Version}' ${local.name} 2>/dev/null)\" = ${var.otelcol_version} ]" : "[ \"$(rpm -q --qf '%%{VERSION}' ${local.name} 2>/dev/null)\" = ${var.otelcol_version} ]"
+    package {
+      name          = local.name
+      source        = conn3x_download.otelcol__download[each.key].dest
+      source_sha256 = conn3x_download.otelcol__download[each.key].sha256
     }
     notify = [handler.restart]
   }

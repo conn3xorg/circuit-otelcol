@@ -99,7 +99,7 @@ On each host, in order:
 1. Stops and disables the other distribution's service, if it's there from an earlier apply, so the two don't fight over ports. Its package stays installed.
 2. Installs `curl` if it's missing.
 3. Downloads `DISTRIBUTION_VERSION_linux_ARCH.deb` or `.rpm` from the GitHub release into `/var/cache/conn3x-otelcol`. If the checksum doesn't match `checksums`, the apply fails and nothing is installed.
-4. Installs it with `apt-get` or `dnf`, unless that version is already installed. The package creates its own system user, enables the service, and starts it with upstream's example config, which the steps below replace.
+4. Installs it with `apt-get` or `dnf`, unless that version is already installed, and only if the file still has the SHA-256 the download checked. An older file downgrades it. On Debian and Ubuntu, `apt-get` keeps a config file you or the circuit changed when an upgrade ships a new one. The package creates its own system user, enables the service, and starts it with upstream's example config, which the steps below replace.
 5. Writes `environment` to `/etc/DISTRIBUTION/conn3x.env`, mode 0600, owned by root. Only an HMAC of the content is kept in state.
 6. Writes a systemd drop-in that reads that file and adds the collector to the `systemd-journal` group, so the journald receiver can read the whole journal, and reloads systemd when the drop-in changes.
 7. Writes the rendered config to `/etc/DISTRIBUTION/config.yaml.conn3x`.
@@ -170,7 +170,9 @@ The default config uses component names from 0.164.0, such as `host_metrics` and
 
 ## Requirements
 
-Requires Conn3x v0.29.0 or later, systemd on each host, and outbound HTTPS to github.com. Hosts must be x86_64 or arm64.
+Requires Conn3x v0.36.0 or later, systemd on each host, and outbound HTTPS to github.com. Hosts must be x86_64 or arm64.
+
+Coming from v0.3.0 or earlier, the first plan swaps the old `command` step for a `package` step: 2 to add, 2 to destroy. With the collector already at `otelcol_version`, the apply installs nothing and leaves `config.yaml` alone, but the collector restarts once, because the restart handler follows the new step. Every plan after that is clean.
 
 ## Tested on
 
